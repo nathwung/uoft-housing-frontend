@@ -57,6 +57,8 @@ const badgeColors = {
   'Long-Term Housing': 'bg-indigo-200 text-indigo-900',
 };
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 export default function ListingsPage() {
   const [search, setSearch] = useState('');
   const [activeType, setActiveType] = useState('All');
@@ -98,7 +100,7 @@ export default function ListingsPage() {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/favorites/${user.email}`);
+        const res = await fetch(`${API_BASE_URL}/api/favorites/${user.email}`);
         const data = await res.json();
         setFavorites(data.map(id => String(id)));
       } catch (err) {
@@ -116,7 +118,7 @@ export default function ListingsPage() {
   useEffect(() => {
     const fetchListingsWithCoords = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/listings');
+        const res = await fetch(`${API_BASE_URL}/api/listings`);
         const data = await res.json();
   
         const listingsWithCoords = await Promise.all(
@@ -139,7 +141,7 @@ export default function ListingsPage() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this listing?")) {
-      await fetch(`http://localhost:5000/api/listings/${id}`, {
+      await fetch(`${API_BASE_URL}/api/listings/${id}`, {
         method: 'DELETE'
       });      
       setListings((prev) => prev.filter((listing) => String(listing.id) !== String(id)));
@@ -413,7 +415,7 @@ export default function ListingsPage() {
     try {
       if (favorites.includes(idStr)) {
         // DELETE
-        await fetch('http://localhost:5000/api/favorites', {
+        await fetch(`${API_BASE_URL}/api/favorites`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -424,7 +426,7 @@ export default function ListingsPage() {
         setFavorites((prev) => prev.filter(id => id !== idStr));
       } else {
         // POST
-        await fetch('http://localhost:5000/api/favorites', {
+        await fetch(`${API_BASE_URL}/api/favorites`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

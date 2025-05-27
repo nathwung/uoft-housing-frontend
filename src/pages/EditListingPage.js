@@ -6,6 +6,8 @@ import ImageCarousel from '../components/ImageCarousel';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const user = JSON.parse(localStorage.getItem('user') || '{}');
 
 const badgeColors = {
@@ -74,7 +76,7 @@ React.useEffect(() => {
   React.useEffect(() => {
     async function fetchListingAndMessages() {
       try {
-        const listingRes = await fetch(`http://localhost:5000/api/listings/${id}`);
+        const listingRes = await fetch(`${API_BASE_URL}/api/listings/${id}`);
         const listing = await listingRes.json();
   
         const latestUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -96,7 +98,7 @@ React.useEffect(() => {
   
         const posterName = listing.poster?.name;
   
-        const msgRes = await fetch(`http://localhost:5000/api/messages/grouped/${id}`);
+        const msgRes = await fetch(`${API_BASE_URL}/api/messages/grouped/${id}`);
         const messageData = await msgRes.json();
   
         setMessages(messageData);
@@ -148,7 +150,7 @@ React.useEffect(() => {
     };         
     const existing = JSON.parse(localStorage.getItem('tempListings') || '[]');
     const mod = existing.map((l) => String(l.id) === id ? updated : l);
-    await fetch(`http://localhost:5000/api/listings/${id}`, {
+    await fetch(`${API_BASE_URL}/api/listings/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -573,14 +575,14 @@ React.useEffect(() => {
                       
                         const messageId = msg.id; // get message ID from message object
                         try {
-                          const res = await fetch(`http://localhost:5000/api/messages/${id}/${messageId}`, {
+                          const res = await fetch(`${API_BASE_URL}/api/messages/${id}/${messageId}`, {
                             method: 'DELETE',
                           });
                       
                           const result = await res.json();
                           if (result.success) {
                             // re-fetch messages from backend after deletion
-                            const updatedRes = await fetch(`http://localhost:5000/api/messages/grouped/${id}`);
+                            const updatedRes = await fetch(`${API_BASE_URL}/api/messages/grouped/${id}`);
                             const updatedMessages = await updatedRes.json();
                             setMessages(updatedMessages);
                           } else {
@@ -625,7 +627,7 @@ React.useEffect(() => {
                   };
                 
                   try {
-                    const res = await fetch(`http://localhost:5000/api/messages/${id}`, {
+                    const res = await fetch(`${API_BASE_URL}/api/messages/${id}`, {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify(message),
@@ -633,7 +635,7 @@ React.useEffect(() => {
                     const saved = await res.json();
                 
                     if (!saved.error) {
-                      const updatedRes = await fetch(`http://localhost:5000/api/messages/grouped/${id}`);
+                      const updatedRes = await fetch(`${API_BASE_URL}/api/messages/grouped/${id}`);
                       const updatedMessages = await updatedRes.json();
                       setMessages(updatedMessages);
                       setInput('');
@@ -660,7 +662,7 @@ onClick={async () => {
   };
 
   try {
-    const res = await fetch(`http://localhost:5000/api/messages/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/api/messages/${id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(message),
@@ -668,7 +670,7 @@ onClick={async () => {
     const saved = await res.json();
 
     if (!saved.error) {
-      const updatedRes = await fetch(`http://localhost:5000/api/messages/grouped/${id}`);
+      const updatedRes = await fetch(`${API_BASE_URL}/api/messages/grouped/${id}`);
       const updatedMessages = await updatedRes.json();
       setMessages(updatedMessages);
       setInput('');

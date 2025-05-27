@@ -99,8 +99,9 @@ export default function CreateListingPage() {
         year: user.year,
       }
     };
-  
-    await fetch('http://localhost:5000/api/listings', {
+
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    await fetch(`${API_BASE_URL}/api/listings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

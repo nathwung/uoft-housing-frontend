@@ -4,6 +4,8 @@ import mockListings from '../data/mockListings';
 import { MapPin, ArrowLeft, Users, BedDouble, Home, Tag } from 'lucide-react';
 import ImageCarousel from '../components/ImageCarousel';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const user = JSON.parse(localStorage.getItem('user') || '{}');
 
 const badgeColors = {
@@ -57,7 +59,7 @@ export default function ListingDetailPage() {
   React.useEffect(() => {
     const fetchListing = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/listings/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/listings/${id}`);
         const data = await res.json();
         setListing(data);
       } catch (err) {
@@ -73,7 +75,7 @@ export default function ListingDetailPage() {
   React.useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/messages/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/messages/${id}`);
         const all = await res.json();
   
         const filtered = all.filter(
@@ -109,7 +111,7 @@ export default function ListingDetailPage() {
     };        
   
     try {
-      const res = await fetch(`http://localhost:5000/api/messages/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/messages/${id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMessage),
@@ -367,7 +369,7 @@ try {
                   onClick={async () => {
                     if (!window.confirm("Delete this message?")) return;
                     try {
-                      await fetch(`http://localhost:5000/api/messages/${id}/${msg.id}`, {
+                      await fetch(`${API_BASE_URL}/api/messages/${id}/${msg.id}`, {
                         method: 'DELETE',
                       });
                       setMessages((prev) => prev.filter((m) => m.id !== msg.id));

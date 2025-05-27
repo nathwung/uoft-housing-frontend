@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 export default function EditProfilePage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -39,7 +41,7 @@ export default function EditProfilePage() {
     };
   
     try {
-      const res = await fetch('http://localhost:5000/api/update-profile', {
+      const res = await fetch(`${API_BASE_URL}/api/update-profile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser),
